@@ -1,10 +1,10 @@
 import java.util.concurrent.BlockingQueue;
 
-public class Cliente implements Runnable {
-    private final BlockingQueue<Pedido> queue;
+public class Producer implements Runnable {
+    private final BlockingQueue<Request> queue;
     private final int numDeCozinheiros;
 
-    public Cliente(BlockingQueue<Pedido> queue, int numDeCozinheiros) {
+    public Producer(BlockingQueue<Request> queue, int numDeCozinheiros) {
         this.queue = queue;
         this.numDeCozinheiros = numDeCozinheiros;
     }
@@ -13,12 +13,12 @@ public class Cliente implements Runnable {
     public void run() {
         try {
             for (int i = 1; i <= 100; i++) {
-                System.out.println("Cliente fez o pedido: " + i);
-                queue.put(new Pedido(i, "pedido " + i));
+                System.out.println(Thread.currentThread().getName() + " fez o request: " + i);
+                queue.put(new Request(i, "request " + i));
                 Thread.sleep(100);
             }
             for (int i = 0; i < numDeCozinheiros; i++) {
-                queue.put(new Pedido(-1, "")); // pedido envenenado
+                queue.put(new Request(-1, "")); // request envenenado para cada um dos cozinheiros
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

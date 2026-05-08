@@ -5,20 +5,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        int numClientes = 3;
+        int numProducers = 3;
 
-        try (ExecutorService pool = Executors.newFixedThreadPool(numClientes)) {
-            // queue que blocka caso esteja cheia
-            BlockingQueue<Pedido> queue = new LinkedBlockingQueue<>(25);
+        try (ExecutorService pool = Executors.newFixedThreadPool(numProducers)) {
+            BlockingQueue<Request> queue = new LinkedBlockingQueue<>(25);
 
-            for (int i = 1; i <= numClientes; i++) {
-                pool.submit((new Cozinheiro(queue, i)));
+            for (int i = 1; i <= numProducers; i++) {
+                pool.submit((new Consumer(queue)));
             }
 
-            Thread cliente = new Thread(new Cliente(queue, numClientes));
-            cliente.start();
-            cliente.join();
+            Thread producer = new Thread(new Producer(queue, numProducers));
+            producer.start();
+            producer.join();
         }
-        System.out.println("Restaurante fechado!");
+        System.out.println("Todas as requests foram processadas!");
     }
 }
