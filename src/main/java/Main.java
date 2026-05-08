@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        int numProducers = 3;
+        int numProducers = 5;
 
         try (ExecutorService pool = Executors.newFixedThreadPool(numProducers)) {
             BlockingQueue<Request> queue = new LinkedBlockingQueue<>(25);

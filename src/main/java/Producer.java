@@ -2,11 +2,11 @@ import java.util.concurrent.BlockingQueue;
 
 public class Producer implements Runnable {
     private final BlockingQueue<Request> queue;
-    private final int numDeCozinheiros;
+    private final int consumerAmount;
 
-    public Producer(BlockingQueue<Request> queue, int numDeCozinheiros) {
+    public Producer(BlockingQueue<Request> queue, int consumerAmount) {
         this.queue = queue;
-        this.numDeCozinheiros = numDeCozinheiros;
+        this.consumerAmount = consumerAmount;
     }
 
     @Override
@@ -17,8 +17,8 @@ public class Producer implements Runnable {
                 queue.put(new Request(i, "request " + i));
                 Thread.sleep(100);
             }
-            for (int i = 0; i < numDeCozinheiros; i++) {
-                queue.put(new Request(-1, "")); // request envenenado para cada um dos cozinheiros
+            for (int i = 0; i < consumerAmount; i++) {
+                queue.put(new Request(-1, "")); // request envenenado para cada um dos consumidores
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
